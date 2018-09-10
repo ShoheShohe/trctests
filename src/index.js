@@ -19,13 +19,7 @@ class Frame extends React.Component {
   }
 
   regist(state) {
-    this.setState({
-      mail: state.mail,
-      familyname: state.familyname,
-      firstname: state.firstname,
-      sex: state.sex,
-      years: state.years
-    });
+    this.setState(state);
     console.log(state);
     console.log(this.state);
   }
