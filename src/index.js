@@ -18,20 +18,22 @@ class Frame extends React.Component {
     this.regist = this.regist.bind(this);
   }
 
-  regist(userinfo) {
+  regist(state) {
     this.setState({
-      mail: userinfo[0],
-      familyname: userinfo[1],
-      firstname: userinfo[2],
-      sex: userinfo[3],
-      years: userinfo[4]
+      mail: state.mail,
+      familyname: state.familyname,
+      firstname: state.firstname,
+      sex: state.sex,
+      years: state.years
     });
+    console.log(state);
+    console.log(this.state);
   }
 
   render() {
     return (
       <div>
-        <Form regist={(userinfo) => { this.regist(userinfo); }} />
+        <Form regist={(state) => { this.regist(state); }} />
         <table className="table table-striped">
           <thead>
             <tr>
@@ -55,20 +57,23 @@ class Form extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      mailLabel: 'メールアドレス',
-      mailPH: 'sample@example.com',
-      nameLabel: '名前',
-      familyPH: '姓',
-      firstnamePH: '名',
-      sex: '性別',
-      years: '年齢',
-      buttonText: '登録',
-      userinfo: ['','','','','']
+
     };
+    this.onClickButton = this.onClickButton.bind(this);
+    this.onChangeField = this.onChangeField.bind(this);
   }
 
-  onClick(){
-    return this.props.regist(this.state.userinfo);
+  onClickButton(){
+    // selectが初期状態の時でもvalueを取り出してsetStateするように書く必要あり
+    return this.props.regist(this.state);
+  }
+
+  onChangeField(event) {
+    console.log(event.target.name, event.target.value);
+    this.setState({
+      [event.target.name]: event.target.value
+    });
+    console.log(this.state);
   }
 
 	render() {
@@ -77,17 +82,21 @@ class Form extends React.Component {
         <div className="col-12">
           <form id="registerForm">
             <div className="form-group">
-              <label>{this.state.mailLabel}</label>
-      				<input type="text" className="form-control" placeholder={this.state.mailPH} name="id" value={this.state.userinfo[0]} />
+              <label>メールアドレス</label>
+      				<input type="text" className="form-control" placeholder="sample@example.com"
+                name="mail" value={this.state.name} onChange={this.onChangeField} />
             </div>
             <div className="form-group">
-              <label>{this.state.nameLabel}</label>
-              <input type="text" className="form-control" name="familyname" placeholder={this.state.familyPH} value={this.state.userinfo[1]} />
-              <input type="text" className="form-control" name="firstname" placeholder={this.state.firstnamePH} value={this.state.userinfo[2]} />
+              <label>名前</label>
+              <input type="text" className="form-control" placeholder="姓"
+                name="familyname" value={this.state.name} onChange={this.onChangeField} />
+              <input type="text" className="form-control" placeholder="名"
+                name="firstname" value={this.state.name} onChange={this.onChangeField} />
             </div>
             <div className="form-group">
-              <label>{this.state.sex}
-                <select className="form-control" name="sex" size="3" value={this.state.userinfo[3]}>
+              <label>性別
+                <select className="form-control" size="3"
+                  name="sex" value={this.state.name} onChange={this.onChangeField}>
                   <option value="男性" label="男性"></option>
                   <option value="女性" label="女性"></option>
                   <option value="その他" label="その他"></option>
@@ -95,8 +104,9 @@ class Form extends React.Component {
               </label>
             </div>
             <div className="form-group">
-              <label>{this.state.years}
-                <select className="form-control" name="years" size="5" value={this.state.userinfo[4]}>
+              <label>年齢
+                <select className="form-control" size="5"
+                  name="years" value={this.state.name} onChange={this.onChangeField}>
                   <option value="10-19" label="10-19"></option>
                   <option value="20-29" label="20-29"></option>
                   <option value="30-39" label="30-39"></option>
@@ -106,8 +116,8 @@ class Form extends React.Component {
               </label>
             </div>
 
-    				<button type="button" id="registerButton" className="btn btn-secondary" onClick={this.props.regist}>
-              {this.state.buttonText}
+    				<button type="button" id="registerButton" className="btn btn-secondary" onClick={this.onClickButton}>
+              登録
             </button>
     			</form>
         </div>
