@@ -3,19 +3,17 @@ import ReactDOM from 'react-dom';
 import 'bootstrap';
 import './index.scss';
 
-import {SubComponent} from './sub-component';
-
 class Frame extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       users : [
         {
-          mail: 'ini',
-          familyname: 'ini',
-          firstname: 'ini',
-          sex: '男性',
-          years: '10-19'
+          mail: '',
+          familyname: '',
+          firstname: '',
+          sex: '',
+          years: ''
         }
       ]
     }
@@ -26,16 +24,18 @@ class Frame extends React.Component {
     var oneUser = state;
     this.state.users.push(oneUser);
     // 保存
+
     this.setState({
       users : this.state.users
     });
-    // 初期化。Formのvalueをクリアする処理を書く必要あり。
+    // 初期化
+    this.refs.Form.clearField();
   }
 
   render() {
     return (
       <div>
-        <Form regist={(state) => { this.regist(state); }} />
+        <Form regist={(state) => { this.regist(state); }} ref='Form' />
         <table className="table table-striped">
           <thead>
             <tr>
@@ -53,27 +53,47 @@ class Frame extends React.Component {
   }
 }
 
+
 class Form extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-
+      mail: '',
+      familyname: '',
+      firstname: '',
+      sex: '男性',
+      years: '10-19'
     };
     this.onClickButton = this.onClickButton.bind(this);
     this.onChangeField = this.onChangeField.bind(this);
+    this.clearField = this.clearField.bind(this);
   }
 
   onClickButton(){
     // selectが初期状態の時でもvalueを取り出してsetStateするように書く必要あり
+    this.setState({
+      mail: this.refs.mail.value,
+      familyname: this.refs.firstname.value,
+      firstname: this.refs.familyname.value,
+      sex: this.refs.sex.value,
+      years: this.refs.years.value
+    });
     return this.props.regist(this.state);
   }
 
   onChangeField(event) {
-    console.log(event.target.name, event.target.value);
     this.setState({
       [event.target.name]: event.target.value
     });
-    console.log(this.state);
+  }
+
+  clearField() {
+    this.refs.mail.value='';
+    this.refs.firstname.value='';
+    this.refs.familyname.value='';
+    this.refs.sex.value='';
+    this.refs.years.value='';
+
   }
 
 	render() {
@@ -84,19 +104,19 @@ class Form extends React.Component {
             <div className="form-group">
               <label>メールアドレス</label>
       				<input type="text" className="form-control" placeholder="sample@example.com"
-                name="mail" value={this.state.name} onChange={this.onChangeField} />
+                name="mail" value={this.state.name} ref='mail' onChange={this.onChangeField} />
             </div>
             <div className="form-group">
               <label>名前</label>
               <input type="text" className="form-control" placeholder="姓"
-                name="familyname" value={this.state.name} onChange={this.onChangeField} />
+                name="familyname" value={this.state.name} ref='familyname' onChange={this.onChangeField} />
               <input type="text" className="form-control" placeholder="名"
-                name="firstname" value={this.state.name} onChange={this.onChangeField} />
+                name="firstname" value={this.state.name} ref='firstname' onChange={this.onChangeField} />
             </div>
             <div className="form-group">
               <label>性別
                 <select className="form-control" size="3"
-                  name="sex" value={this.state.name} onChange={this.onChangeField}>
+                  name="sex" value={this.state.name} ref='sex' onChange={this.onChangeField}>
                   <option value="男性" label="男性"></option>
                   <option value="女性" label="女性"></option>
                   <option value="その他" label="その他"></option>
@@ -106,7 +126,7 @@ class Form extends React.Component {
             <div className="form-group">
               <label>年齢
                 <select className="form-control" size="5"
-                  name="years" value={this.state.name} onChange={this.onChangeField}>
+                  name="years" value={this.state.name} ref='years' onChange={this.onChangeField}>
                   <option value="10-19" label="10-19"></option>
                   <option value="20-29" label="20-29"></option>
                   <option value="30-39" label="30-39"></option>
@@ -126,6 +146,7 @@ class Form extends React.Component {
 		);
 	}
 }
+
 
 class Table extends React.Component {
   constructor(props) {
