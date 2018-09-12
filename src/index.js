@@ -9,19 +9,27 @@ class Frame extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      mail: '',
-      familyname: '',
-      firstname: '',
-      sex: '',
-      years: ''
-    };
+      users : [
+        {
+          mail: 'ini',
+          familyname: 'ini',
+          firstname: 'ini',
+          sex: '男性',
+          years: '10-19'
+        }
+      ]
+    }
     this.regist = this.regist.bind(this);
   }
 
   regist(state) {
-    this.setState(state);
-    console.log(state);
-    console.log(this.state);
+    var oneUser = state;
+    this.state.users.push(oneUser);
+    // 保存
+    this.setState({
+      users : this.state.users
+    });
+    // 初期化。Formのvalueをクリアする処理を書く必要あり。
   }
 
   render() {
@@ -38,9 +46,7 @@ class Frame extends React.Component {
               <th>年齢</th>
             </tr>
           </thead>
-          <tbody id="table">
-            <Table />
-          </tbody>
+            <Table users={this.state.users} />
         </table>
       </div>
     );
@@ -122,11 +128,28 @@ class Form extends React.Component {
 }
 
 class Table extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+
+    };
+    console.log(this.props.users);
+  }
   render() {
     return (
-      <tr>
-        <td></td>
-      </tr>
+      <tbody>
+        {this.props.users.map( (users, i) => {
+          return (
+            <tr key={i}>
+              <td>{users['mail']}</td>
+              <td>{users['familyname']}</td>
+              <td>{users['firstname']}</td>
+              <td>{users['sex']}</td>
+              <td>{users['years']}</td>
+            </tr>
+          );
+         })}
+      </tbody>
     );
   }
 }
